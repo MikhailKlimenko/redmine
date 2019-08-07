@@ -140,6 +140,17 @@ module IssuesHelper
     content_tag('table', s, :class => 'list issues odd-even')
   end
 
+  def render_children(issue, api)
+    @children = Issue.where(:parent_id => issue.id)
+    if @children != []
+      array = Array.new
+      @children.each do |child|
+        array.push(child.id)
+      end
+      eval("api.#{"children_id"} array")
+    end
+  end
+
   def issue_estimated_hours_details(issue)
     if issue.total_estimated_hours.present?
       if issue.total_estimated_hours == issue.estimated_hours
